@@ -1,14 +1,38 @@
-import React from "react";
+"use client";
+
+import Image from "next/image";
+import { useRef, useState } from "react";
 import { FaImage } from "react-icons/fa6";
 
 const CreatePost = () => {
+  const fileRef = useRef(null);
+
+  const openBrowse = async () => {
+    await fileRef.current.click();
+  };
+  const [image, setImage] = useState(null);
+
   return (
     <div className="w-full">
       <div>
-        <div className="cursor-pointer w-full p-5 h-[20vh] bg-gray-200 rounded-md flex items-center justify-center">
-          <FaImage size={100} color={"gray"} />
+        <div
+          onClick={openBrowse}
+          className="cursor-pointer w-full h-[20vh] bg-gray-200 rounded-md flex items-center justify-center relative"
+        >
+          {image ? (
+            <Image src={image} alt="" width={300} height={300} />
+          ) : (
+            <FaImage size={100} color={"gray"} />
+          )}
         </div>
-        <input type="file" className="hidden" />
+        <input
+          ref={fileRef}
+          type="file"
+          className="hidden"
+          onChange={(e) => {
+            setImage(URL.createObjectURL(e.target.files[0]));
+          }}
+        />
       </div>
       <div className="mt-4">
         <input
